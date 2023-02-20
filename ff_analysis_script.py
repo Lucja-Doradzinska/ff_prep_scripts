@@ -84,15 +84,25 @@ lat_contrast = {'task':['DP', 'ID'], 'masking':['masked', 'unmasked'], 'faces':[
 new_conditions = OrderedDict({'contrast':{'congr':[{'left_face':'F', 'right_face':'N', 'dot_side':'left'}, 
                                                    {'left_face':'N', 'right_face':'F', 'dot_side':'right'}],
                                           'incongr':[{'left_face':'F', 'right_face':'N', 'dot_side':'right'}, 
-                                                      {'left_face':'N', 'right_face':'F', 'dot_side':'left'}],
+                                                     {'left_face':'N', 'right_face':'F', 'dot_side':'left'}],
                                             
                                           'fear-symm':[{'left_face':'F', 'right_face':'F'}],
                                           'neutr-symm':[{'left_face':'N', 'right_face':'N'}]},
-                                
+                              
+                              'emo_congr':{'congr':[{'left_face':'F', 'right_face':'N'}, 
+                                                    {'left_face':'N', 'right_face':'F'}],
+                                           'incongr':[{'left_face':'F', 'right_face':'F'}, 
+                                                      {'left_face':'N', 'right_face':'N'}]}, 
+                              
                               'target':{'fearful':[{'left_face':'F', 'dot_side':'left'}, 
-                                                    {'right_face':'F', 'dot_side':'right'}],
+                                                   {'right_face':'F', 'dot_side':'right'}],
                                          'neutral':[{'right_face':'N', 'dot_side':'right'}, 
-                                                    {'left_face':'N', 'dot_side':'left'}]}})
+                                                    {'left_face':'N', 'dot_side':'left'}]},
+                              
+                              'dist_face':{'fearful':[{'left_face':'F', 'dot_side':'right'}, 
+                                                      {'right_face':'F', 'dot_side':'left'}],
+                                           'neutral':[{'right_face':'N', 'dot_side':'left'}, 
+                                                      {'left_face':'N', 'dot_side':'right'}]}})
 
 
 factors = ff_lab_mn.get_beh_factors(beh_stim_coding, new_conditions)
@@ -113,8 +123,8 @@ control_accuracy_log = beh_analizer.calculate_accuracy('control_accuracy_log', c
  
 #MAIN ANALYSIS
 main_combine = {'task':['DP', 'ID'],
-           'masking':['masked', 'unmasked'],
-           'contrast':['congr', 'incongr', 'fear-symm', 'neutr-symm']}
+                'masking':['masked', 'unmasked'],
+                'contrast':['congr', 'incongr', 'fear-symm', 'neutr-symm']}
 main_compare = ff_lab_mn.beh_combine_conds(main_combine)
 resp_count_log = beh_analizer.summarize_corr_resps('resp_log', main_compare, save_csv = True)
 accuracy_log = beh_analizer.calculate_accuracy('accuracy_log', main_compare, save_csv = True)
@@ -136,6 +146,22 @@ noise = {'target':['neutral']}
 d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_mask_vs_unmask', d_compare, signal, noise, d_corr = True, 
                                                              save_hit_fa_log = True, save_csv = True)
 
+
+d_combine = {'task':['ID'],
+             'masking':['masked', 'unmasked'],
+             'emo_congr':['congr', 'incongr'] }
+d_compare = ff_lab_mn.beh_combine_conds(d_combine)
+signal = {'target':['fearful'], }
+noise = {'target':['neutral']}
+d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_emo_congr', d_compare, signal, noise, d_corr = True, save_csv = True)
+
+d_combine = {'task':['ID'],
+             'masking':['masked', 'unmasked'],
+             'dist_face':['fearful', 'neutral'] }
+d_compare = ff_lab_mn.beh_combine_conds(d_combine)
+signal = {'target':['fearful'], }
+noise = {'target':['neutral']}
+d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_dist_face', d_compare, signal, noise, d_corr = True, save_csv = True)
 #%% EEG PREPROCESSING
 
 #REREFERENCING RAW DATA
@@ -252,6 +278,7 @@ for comp in lateral_comps:
 #%% EXTRACT COMPONENTS TRIAL BY TRIAL 
 
 reduce_markers = markers.reduce_markers()
+evoked_labels = markers.evoked_labels()
 epochs_data = my.comps_long.Trials_data(subjects, path, epochs_clean_folder, reduce_markers, evoked_labels = evoked_labels)
 
 
