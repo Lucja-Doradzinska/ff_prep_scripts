@@ -89,10 +89,10 @@ new_conditions = OrderedDict({'contrast':{'congr':[{'left_face':'F', 'right_face
                                           'fear-symm':[{'left_face':'F', 'right_face':'F'}],
                                           'neutr-symm':[{'left_face':'N', 'right_face':'N'}]},
                               
-                              'emo_congr':{'congr':[{'left_face':'F', 'right_face':'N'}, 
-                                                    {'left_face':'N', 'right_face':'F'}],
-                                           'incongr':[{'left_face':'F', 'right_face':'F'}, 
-                                                      {'left_face':'N', 'right_face':'N'}]}, 
+                              'emo_congr':{'congr':[{'left_face':'F', 'right_face':'F'}, 
+                                                    {'left_face':'N', 'right_face':'N'}],
+                                           'incongr':[{'left_face':'F', 'right_face':'N'}, 
+                                                      {'left_face':'N', 'right_face':'F'}]}, 
                               
                               'target':{'fearful':[{'left_face':'F', 'dot_side':'left'}, 
                                                    {'right_face':'F', 'dot_side':'right'}],
@@ -126,6 +126,7 @@ main_combine = {'task':['DP', 'ID'],
                 'masking':['masked', 'unmasked'],
                 'contrast':['congr', 'incongr', 'fear-symm', 'neutr-symm']}
 main_compare = ff_lab_mn.beh_combine_conds(main_combine)
+main_compare = ff_lab_mn.beh_combine_conds(main_combine)
 resp_count_log = beh_analizer.summarize_corr_resps('resp_log', main_compare, save_csv = True)
 accuracy_log = beh_analizer.calculate_accuracy('accuracy_log', main_compare, save_csv = True)
 agg_RT_df = beh_analizer.aggregate_RTs ('median_RT', main_compare, 200, 1600, save_csv = True)
@@ -146,22 +147,6 @@ noise = {'target':['neutral']}
 d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_mask_vs_unmask', d_compare, signal, noise, d_corr = True, 
                                                              save_hit_fa_log = True, save_csv = True)
 
-
-d_combine = {'task':['ID'],
-             'masking':['masked', 'unmasked'],
-             'emo_congr':['congr', 'incongr'] }
-d_compare = ff_lab_mn.beh_combine_conds(d_combine)
-signal = {'target':['fearful'], }
-noise = {'target':['neutral']}
-d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_emo_congr', d_compare, signal, noise, d_corr = True, save_csv = True)
-
-d_combine = {'task':['ID'],
-             'masking':['masked', 'unmasked'],
-             'dist_face':['fearful', 'neutral'] }
-d_compare = ff_lab_mn.beh_combine_conds(d_combine)
-signal = {'target':['fearful'], }
-noise = {'target':['neutral']}
-d_log, c_log, hit_fa_log = beh_analizer.calculate_sdt_params('ID_dist_face', d_compare, signal, noise, d_corr = True, save_csv = True)
 #%% EEG PREPROCESSING
 
 #REREFERENCING RAW DATA
